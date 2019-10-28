@@ -4,20 +4,9 @@
 
 #define PROGRAM_NAME "Sixdof81Dialog"
 
-#define IS_81_PLATFORM 1
-//#define IS_84_PLATFORM 1
-//#define IS_63_PLATFORM 1
-//#define IS_79_PLATFORM 1
-//#define IS_81_UP_PLATFORM 1
-
-#ifdef IS_81_PLATFORM
-
 #define IS_BIG_MOTION 0
 #define IS_PULSE_CARD_REVERSE 1
 #define IS_REVERSE_CONTROL 1
-
-#endif
-
 
 
 #endif

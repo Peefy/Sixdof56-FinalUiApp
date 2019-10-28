@@ -1,0 +1,24 @@
+﻿{
+    "riseP" : 0.6,        // 平台上升参数P
+    "riseI" : 0.00015,    // 平台上升参数I
+    "riseD" : 0.0,        // 平台上升参数D
+    "motionP" : 4.4,      // 平台运行参数P
+    "motionI" : 0.002,    // 平台运行参数I
+    "motionD" : 0.0,      // 平台运行参数D
+    "naviP" : 0.0001,
+    "naviI" : 0.00001,
+    "naviD" : 0.000001,
+    "rollScale" : 1.0,
+    "yawScale" : 2.0,
+    "pitchScale" : -1.0,
+    "rollFilterLevel" : 12,
+    "yawFilterLevel" : 12,
+    "pitchFilterLevel" : 12,
+    "xScale" : 0.01,
+    "yScale" : 0.01,
+    "zScale" : 0.01,
+    "xFilterLevel" : 8,
+    "yFilterLevel" : 8,
+    "zFilterLevel" : 8
+}
+

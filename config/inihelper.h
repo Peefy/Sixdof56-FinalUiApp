@@ -86,18 +86,89 @@ using namespace std;
 // json-key:惯导稳定PID控制器D
 #define JSON_NAVI_D_KEY               "naviD"
 
-// json-key:平台上升PID控制器P
-#define JSON_RISE_P_KEY               "riseP"
-// json-key:平台上升PID控制器I
-#define JSON_RISE_I_KEY               "riseI"
-// json-key:平台上升PID控制器D
-#define JSON_RISE_D_KEY               "riseD"
-// json-key:平台运行PID控制器P
-#define JSON_MOTION_P_KEY             "motionP"
-// json-key:平台运行PID控制器I
-#define JSON_MOTION_I_KEY             "motionI"
-// json-key:平台运行PID控制器D
-#define JSON_MOTION_D_KEY             "motionD"
+// json-key:平台上升PID控制器P_1
+#define JSON_RISE_P_1_KEY               "riseP1"
+// json-key:平台上升PID控制器I_1
+#define JSON_RISE_I_1_KEY               "riseI1"
+// json-key:平台上升PID控制器D_1
+#define JSON_RISE_D_1_KEY               "riseD1"
+
+// json-key:平台上升PID控制器P_2
+#define JSON_RISE_P_2_KEY               "riseP2"
+// json-key:平台上升PID控制器I_2
+#define JSON_RISE_I_2_KEY               "riseI2"
+// json-key:平台上升PID控制器D_2
+#define JSON_RISE_D_2_KEY               "riseD2"
+
+// json-key:平台上升PID控制器P_3
+#define JSON_RISE_P_3_KEY               "riseP3"
+// json-key:平台上升PID控制器I_3
+#define JSON_RISE_I_3_KEY               "riseI3"
+// json-key:平台上升PID控制器D_3
+#define JSON_RISE_D_3_KEY               "riseD3"
+
+// json-key:平台上升PID控制器P_4
+#define JSON_RISE_P_4_KEY               "riseP4"
+// json-key:平台上升PID控制器I_4
+#define JSON_RISE_I_4_KEY               "riseI4"
+// json-key:平台上升PID控制器D_4
+#define JSON_RISE_D_4_KEY               "riseD4"
+
+// json-key:平台上升PID控制器P_5
+#define JSON_RISE_P_5_KEY               "riseP5"
+// json-key:平台上升PID控制器I_5
+#define JSON_RISE_I_5_KEY               "riseI5"
+// json-key:平台上升PID控制器D_5
+#define JSON_RISE_D_5_KEY               "riseD5"
+
+// json-key:平台上升PID控制器P_6
+#define JSON_RISE_P_6_KEY               "riseP6"
+// json-key:平台上升PID控制器I_6
+#define JSON_RISE_I_6_KEY               "riseI6"
+// json-key:平台上升PID控制器D_6
+#define JSON_RISE_D_6_KEY               "riseD6"
+
+// json-key:平台运行PID控制器P_1
+#define JSON_MOTION_P_1_KEY             "motionP1"
+// json-key:平台运行PID控制器I_1
+#define JSON_MOTION_I_1_KEY             "motionI1"
+// json-key:平台运行PID控制器D_1
+#define JSON_MOTION_D_1_KEY             "motionD1"
+
+// json-key:平台运行PID控制器P_2
+#define JSON_MOTION_P_2_KEY             "motionP2"
+// json-key:平台运行PID控制器I_2
+#define JSON_MOTION_I_2_KEY             "motionI2"
+// json-key:平台运行PID控制器D_2
+#define JSON_MOTION_D_2_KEY             "motionD2"
+
+// json-key:平台运行PID控制器P_3
+#define JSON_MOTION_P_3_KEY             "motionP3"
+// json-key:平台运行PID控制器I_3
+#define JSON_MOTION_I_3_KEY             "motionI3"
+// json-key:平台运行PID控制器D_3
+#define JSON_MOTION_D_3_KEY             "motionD3"
+
+// json-key:平台运行PID控制器P_4
+#define JSON_MOTION_P_4_KEY             "motionP4"
+// json-key:平台运行PID控制器I_4
+#define JSON_MOTION_I_4_KEY             "motionI4"
+// json-key:平台运行PID控制器D_4
+#define JSON_MOTION_D_4_KEY             "motionD4"
+
+// json-key:平台运行PID控制器P_5
+#define JSON_MOTION_P_5_KEY             "motionP5"
+// json-key:平台运行PID控制器I_5
+#define JSON_MOTION_I_5_KEY             "motionI5"
+// json-key:平台运行PID控制器D_5
+#define JSON_MOTION_D_5_KEY             "motionD5"
+
+// json-key:平台运行PID控制器P_6
+#define JSON_MOTION_P_6_KEY             "motionP6"
+// json-key:平台运行PID控制器I_6
+#define JSON_MOTION_I_6_KEY             "motionI6"
+// json-key:平台运行PID控制器D_6
+#define JSON_MOTION_D_6_KEY             "motionD6"
 
 namespace config {
 	// 产生默认的config.ini文件

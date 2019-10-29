@@ -56,12 +56,12 @@ static PID_Type MotionLocationPidControler[AXES_COUNT] =
 // 上升过程六个电机的PID控制器
 static PID_Type MotionRisePidControler[AXES_COUNT] = 
 {
+	{ RISE_MOTION_P * 0.9, RISE_MOTION_I * 0.9, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P * 0.88, RISE_MOTION_I * 0.88, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
 	{ RISE_MOTION_P * 0.75, RISE_MOTION_I * 0.50, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P * 0.82, RISE_MOTION_I * 0.86, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
 	{ RISE_MOTION_P * 0.70, RISE_MOTION_I * 0.62, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
 	{ RISE_MOTION_P * 0.74, RISE_MOTION_I * 0.74, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.82, RISE_MOTION_I * 0.86, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.88, RISE_MOTION_I * 0.88, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.9, RISE_MOTION_I * 0.9, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL }
 };
 
 // 构造函数
@@ -82,7 +82,7 @@ DialogMotionControl::~DialogMotionControl()
 
 void DialogMotionControl::InitData()
 {
-	MIDDLE_POS = 4.5;
+	MIDDLE_POS = 2.4;
 	disposed = false; 
 	for (int i = 0; i < AXES_COUNT; ++i)
 	{
@@ -91,21 +91,65 @@ void DialogMotionControl::InitData()
 	}
 	AvrPulse = 0;
 
-	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_KEY);
-	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_KEY);
-	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_KEY);
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		MyControllerSetPidPara(&MotionRisePidControler[i], p, i, d);
-	}
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_1_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_1_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_1_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[0], p, i, d);
 
-	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_KEY);
-	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_KEY);
-	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_KEY);
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		MyControllerSetPidPara(&MotionLocationPidControler[i], p, i, d);
-	}
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_2_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_2_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_2_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[1], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_3_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_3_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_3_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[2], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_4_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_4_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_4_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[3], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_5_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_5_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_5_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[4], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_6_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_6_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_6_KEY);
+	MyControllerSetPidPara(&MotionRisePidControler[5], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_1_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_1_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_1_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[0], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_2_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_2_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_2_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[1], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_3_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_3_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_3_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[2], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_4_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_4_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_4_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[3], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_5_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_5_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_5_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[4], p, i, d);
+
+	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_P_6_KEY);
+	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_6_KEY);
+	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_6_KEY);
+	MyControllerSetPidPara(&MotionLocationPidControler[5], p, i, d);
 
 }
 

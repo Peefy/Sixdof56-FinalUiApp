@@ -42,10 +42,8 @@ using namespace std;
 #define RISE_R 14.0
 
 // 单位mm/s
-//#define RISE_VEL 0.1
-#define RISE_VEL 1.0
+#define RISE_VEL 0.5
 // 单位mm/s
-//#define DOWN_VEL 0.05
 #define DOWN_VEL 0.5
 
 // 平台运动最大角度deg
@@ -86,7 +84,6 @@ using namespace std;
 // 平台正弦运动 偏航角度最大零位deg
 #define MAX_DEG_ZERO_POS_YAW      (MAX_DEG_YAW) 
 
-
 // 缸最大行程(编码器最大读数)
 //#define MAX_POS (PULSE_COUNT_RPM * MAX_MM / MM_RPM)
 #define MAX_POS 10
@@ -102,10 +99,10 @@ using namespace std;
 #define MAX_POLE_LENGTH 0.0
 // 缸伸长量mm到编码器位置的转换系数
 //#define MM_TO_PULSE_COUNT_SCALE (PULSE_COUNT_RPM / MM_RPM)
-#define MM_TO_PULSE_COUNT_SCALE (10 / 1500.0)
+#define MM_TO_PULSE_COUNT_SCALE (5.0 / 1500.0)
 // 编码器位置到缸伸长量mm的转换系数
 //#define PULSE_COUNT_TO_MM_SCALE (MM_RPM / PULSE_COUNT_RPM)
-#define PULSE_COUNT_TO_MM_SCALE (1500 / 10.0)
+#define PULSE_COUNT_TO_MM_SCALE (1500 / 5.0)
 // 电机抱闸电平
 #define MOTION_LOCK_LEVEL   false
 // 接近开关接触电平

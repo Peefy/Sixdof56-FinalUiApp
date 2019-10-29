@@ -179,11 +179,6 @@ void DialogMotionControl::SetMotionVelocty(double* velocity, int axexnum)
 // 设置所有电机是否抱闸
 bool DialogMotionControl::ServoAllOnOff(bool isOn)
 {
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnableAllMotor(isOn);
-#else
-	sixdofDioAndCount.EnableAllMotor(isOn);
-#endif
 	return true;
 }
 
@@ -232,13 +227,7 @@ void DialogMotionControl::EnableServo()
 	for (int i = 0;i < AXES_COUNT;++i)
 	{
 		bits[i] = MOTION_ENABLE_LEVEL;
-	}
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(bits);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(bits);
-#endif
-	
+	}	
 }
 
 // 所有电机关闭抱闸并关闭使能
@@ -249,12 +238,6 @@ void DialogMotionControl::LockServo()
 	{
 		bits[i] = MOTION_LOCK_LEVEL;
 	}
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(bits);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(bits);
-	sixdofDioAndCount.SetMotionLockBit(bits);
-#endif
 	isrising = false;
 	isfalling = false;
 	enableMove = false;
@@ -268,24 +251,12 @@ void DialogMotionControl::UnlockServo()
 	{
 		bits[i] = !MOTION_LOCK_LEVEL;
 	}
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(bits);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(bits);
-	sixdofDioAndCount.SetMotionLockBit(bits);
-#endif
 }
 
 // 单个电机使能
 void DialogMotionControl::EnableServo(int index)
 {
 	ASSERT_INDEX(index);
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(index, MOTION_ENABLE_LEVEL);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(index, MOTION_ENABLE_LEVEL);
-	sixdofDioAndCount.SetMotionLockBit(index, MOTION_ENABLE_LEVEL);
-#endif
 }
 
 // 单个电机上锁
@@ -293,24 +264,12 @@ void DialogMotionControl::LockServo(int index)
 {
 	ASSERT_INDEX(index);
 	enableMove = false;
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(index, MOTION_LOCK_LEVEL);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(index, MOTION_LOCK_LEVEL);
-	sixdofDioAndCount.SetMotionLockBit(index, MOTION_LOCK_LEVEL);
-#endif
 }
 
 // 单个电机解锁
 void DialogMotionControl::UnlockServo(int index)
 {
 	ASSERT_INDEX(index);
-#if IS_BIG_MOTION
-	sixdofDioAndCount.BigMotionEnable(index, !MOTION_LOCK_LEVEL);
-#else
-	sixdofDioAndCount.SetMotionEnableBit(index, !MOTION_LOCK_LEVEL);
-	sixdofDioAndCount.SetMotionLockBit(index, !MOTION_LOCK_LEVEL);
-#endif
 }
 
 // 上升
@@ -529,7 +488,6 @@ void DialogMotionControl::MoveToZeroPulseNumber()
 	}
 	Sleep(10);
 	isrising = true;
-	//UnlockServo();
 }
 
 // PID控制器初始化
@@ -545,7 +503,6 @@ void DialogMotionControl::PidControllerInit()
 bool DialogMotionControl::ServoStop()
 {
 	StopRiseDownMove();
-	LockServo();
 	return true;
 }
 
@@ -572,6 +529,7 @@ void DialogMotionControl::StopRiseDownMove()
 // 所有缸是否位于底部
 bool DialogMotionControl::IsAllAtBottom()
 {
+	ReadAllSwitchStatus();
 	for (auto i = 0; i < AXES_COUNT; ++i)
 	{
 		auto isAtBottom = IsAtBottoms[i];
@@ -632,10 +590,7 @@ bool DialogMotionControl::CheckStatus(SixDofPlatformStatus& status)
 		}			
 		break;
 	case SIXDOF_STATUS_ISFALLING:			
-		if (IsAllAtBottom() == true)
-		{
-			status = SIXDOF_STATUS_BOTTOM;
-		}
+		status = SIXDOF_STATUS_BOTTOM;
 		break;
 	default:
 		break;
@@ -696,24 +651,14 @@ void DialogMotionControl::TestHardware()
 // 硬件电源打开
 void DialogMotionControl::PowerStart(bool isStart)
 {
-#if IS_BIG_MOTION
-	sixdofDioAndCount.Start(isStart);
-#else
-	sixdofDioAndCount.Start(isStart);
-#endif
-	
+
 }
 
 // 检修打开
 void DialogMotionControl::PowerCheckStart(bool isStart)
 {
-#if IS_BIG_MOTION
-	sixdofDioAndCount.CheckStart(isStart);
-#else
-	sixdofDioAndCount.CheckStart(isStart);
-#endif
-}
 
+}
 
 // 油源启动
 void DialogMotionControl::SetOilStart(bool bit)

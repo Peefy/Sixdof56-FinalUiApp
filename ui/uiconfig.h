@@ -14,7 +14,7 @@
 
 #define IDC_STATIC_POSE_SHOW_TEXT      "姿态"
 #define IDC_STATIC_LENGTH_SHOW_TEXT    "缸长"
-#define IDC_STATIC_SENSOR_SHOW_TEXT    "传感器"
+#define IDC_STATIC_SENSOR_SHOW_TEXT    "采集"
 
 #define IDC_STATIC_X_VAL_SHOW_TEXT     "纵向幅值"
 #define IDC_STATIC_Y_VAL_SHOW_TEXT     "横向幅值"

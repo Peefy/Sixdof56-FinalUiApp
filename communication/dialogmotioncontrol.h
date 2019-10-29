@@ -20,7 +20,7 @@ using namespace std;
 #define DDA_CONTROL_THREAD_DELAY 5
 
 // 缸的最大行程mm
-#define MAX_MM 1500
+#define MAX_MM 1500.0
 // 电机丝杠导程单位mm
 #define MM_RPM 25.0
 // 电机转一圈编码器读数 2500
@@ -86,9 +86,9 @@ using namespace std;
 
 // 缸最大行程(编码器最大读数)
 //#define MAX_POS (PULSE_COUNT_RPM * MAX_MM / MM_RPM)
-#define MAX_POS 10
+#define MAX_POS 5.0
 // 缸中位行程(编码器中位读数)
-//double MIDDLE_POS=4.5
+//double MIDDLE_POS=2.4
 // 缸零点行程(编码器零点读数)
 #define ZERO_POS 0.0
 // 缸电机半圈行程(编码器读数)
@@ -98,11 +98,9 @@ using namespace std;
 //#define MAX_POLE_LENGTH (MAX_MM / 2.0)
 #define MAX_POLE_LENGTH 0.0
 // 缸伸长量mm到编码器位置的转换系数
-//#define MM_TO_PULSE_COUNT_SCALE (PULSE_COUNT_RPM / MM_RPM)
-#define MM_TO_PULSE_COUNT_SCALE (5.0 / 1500.0)
+#define MM_TO_PULSE_COUNT_SCALE (MAX_POS / MAX_MM)
 // 编码器位置到缸伸长量mm的转换系数
-//#define PULSE_COUNT_TO_MM_SCALE (MM_RPM / PULSE_COUNT_RPM)
-#define PULSE_COUNT_TO_MM_SCALE (1500 / 5.0)
+#define PULSE_COUNT_TO_MM_SCALE (MAX_MM / MAX_POS)
 // 电机抱闸电平
 #define MOTION_LOCK_LEVEL   false
 // 接近开关接触电平

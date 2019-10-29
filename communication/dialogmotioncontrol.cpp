@@ -350,12 +350,6 @@ void DialogMotionControl::SlowPidCsp(double * pulse)
 			pulse[i] = RANGE_V(pulse[i], 0, MAX_POS);
 			now_vel[i] = MyDeltaPID_Real(&MotionRisePidControler[i], \
 				NowPluse[i], pulse[i]);
-			if (now_vel[i] > 0) {
-				now_vel[i] = RANGE_V(now_vel[i], RISE_MIN_VEL, RISE_MAX_VEL);
-			}
-			if (now_vel[i] < 0) {
-				now_vel[i] = RANGE_V(now_vel[i], -RISE_MAX_VEL, -RISE_MIN_VEL);
-			}
 		}
 		lockobj.unlock();
 	}

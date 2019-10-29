@@ -12,58 +12,23 @@
 #define RANGE_V(x, min, max)    (((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))
 #define ASSERT_INDEX(index) 	if (index < 0 && index >= AXES_COUNT) return;
 
-#if IS_BIG_MOTION
 // 平台运行过程PID控制参数-P
-#define MOTION_P 0.0001
+#define MOTION_P 0.44
 // 平台运行过程PID控制参数-I
-#define MOTION_I 0.0000001
-// 平台运行过程PID控制参数-D
-#define MOTION_D 0.0
-// 平台运行过程当中最大速度
-#define MAX_VEL  2.5
-// 平台上升过程PID控制参数-P
-#define RISE_MOTION_P 0.00004
-// 平台上升过程PID控制参数-I
-#define RISE_MOTION_I 0.0000002
-// 平台上升过程PID控制参数-D
-#define RISE_MOTION_D 0.0
-// 平台上升过程当中最大速度
-#define RISE_MAX_VEL  0.3
-// 惯导稳定过程PID控制参数-P
-#define NAVI_MOTION_P 0.0002
-// 惯导稳定过程PID控制参数-I
-#define NAVI_MOTION_I 0.00003
-// 惯导稳定过程PID控制参数-D
-#define NAVI_MOTION_D 0.000005
-// 惯导稳定过程当中最大速度
-#define NAVI_MAX_VEL  4.0
-#else
-// 平台运行过程PID控制参数-P
-#define MOTION_P 4.4
-// 平台运行过程PID控制参数-I
-#define MOTION_I 0.002
+#define MOTION_I 0.0002
 // 平台运行过程PID控制参数-D
 #define MOTION_D 0.0
 // 平台运行过程当中最大速度
 #define MAX_VEL  6.0
 // 平台上升过程PID控制参数-P
-#define RISE_MOTION_P 0.6
+#define RISE_MOTION_P 0.06
 // 平台上升过程PID控制参数-I
-#define RISE_MOTION_I 0.00015
+#define RISE_MOTION_I 0.00002
 // 平台上升过程PID控制参数-D
-#define RISE_MOTION_D 0.000000
+#define RISE_MOTION_D 0.0
 // 平台上升过程当中最大速度
 #define RISE_MIN_VEL  0.1
 #define RISE_MAX_VEL  2.0
-// 惯导稳定过程PID控制参数-P
-#define NAVI_MOTION_P 0.0002
-// 惯导稳定过程PID控制参数-I
-#define NAVI_MOTION_I 0.00003
-// 惯导稳定过程PID控制参数-D
-#define NAVI_MOTION_D 0.000005
-// 惯导稳定过程当中最大速度
-#define NAVI_MAX_VEL  4.0
-#endif // IS_BIG_MOTION
 
 // PID临时变量
 static double p = 0.0001;
@@ -185,14 +150,12 @@ bool DialogMotionControl::ServoAllOnOff(bool isOn)
 // 单缸向上运动
 void DialogMotionControl::SingleUp(int index)
 {
-	//UnlockServo(index);
 	SetMotionVeloctySingle(index, RISE_VEL);
 }
 
 // 单缸向下运动
 void DialogMotionControl::SingleDown(int index)
 {
-	//UnlockServo(index);
 	SetMotionVeloctySingle(index, -DOWN_VEL);
 }
 
@@ -201,7 +164,6 @@ void DialogMotionControl::AllTestUp()
 {
 	double vel = RISE_VEL;
 	double vels[AXES_COUNT] = {vel, vel, vel, vel, vel, vel};
-	//UnlockServo();
 	SetMotionVelocty(vels, AXES_COUNT);
 }
 
@@ -210,7 +172,6 @@ void DialogMotionControl::AllTestDown()
 {
 	double vel = -DOWN_VEL;
 	double vels[AXES_COUNT] = {vel, vel, vel, vel, vel, vel};
-	//UnlockServo();
 	SetMotionVelocty(vels, AXES_COUNT);
 }
 

@@ -21,10 +21,6 @@ using namespace std;
 
 // 缸的最大行程mm
 #define MAX_MM 1500.0
-// 电机丝杠导程单位mm
-#define MM_RPM 25.0
-// 电机转一圈编码器读数 2500
-#define PULSE_COUNT_RPM 2500
 // 上平台上表面距离上平台铰链的垂直距离mm
 #define PlaneAboveHingeLength       590.0
 // 上平台上表面距离地面的垂直距离mm
@@ -38,12 +34,9 @@ using namespace std;
 // 下平台同一组两个铰链的中心距离mm
 #define DistanceBetweenHingeBottom  330.181
 
-// 上升到中立位电机需要转动的圈数
-#define RISE_R 14.0
-
-// 单位mm/s
+// 单位V
 #define RISE_VEL 0.5
-// 单位mm/s
+// 单位V
 #define DOWN_VEL 0.5
 
 // 平台运动最大角度deg
@@ -84,16 +77,15 @@ using namespace std;
 // 平台正弦运动 偏航角度最大零位deg
 #define MAX_DEG_ZERO_POS_YAW      (MAX_DEG_YAW) 
 
-// 缸最大行程(编码器最大读数)
-//#define MAX_POS (PULSE_COUNT_RPM * MAX_MM / MM_RPM)
+// 缸最大行程(板卡最大读数)
 #define MAX_POS 5.0
-// 缸中位行程(编码器中位读数)
+// 缸中位行程(板卡中位读数)
 //double MIDDLE_POS=2.4
-// 缸零点行程(编码器零点读数)
+// 缸零点行程(板卡零点读数)
 #define ZERO_POS 0.0
 // 缸电机半圈行程(编码器读数)
 //#define HALF_RPM_POS (ZERO_POS + PULSE_COUNT_RPM / 2.0)
-#define HALF_RPM_POS 0.0
+#define HALF_RPM_POS 0.2
 // 缸在中位时运动的最大位移
 //#define MAX_POLE_LENGTH (MAX_MM / 2.0)
 #define MAX_POLE_LENGTH 0.0
@@ -101,12 +93,6 @@ using namespace std;
 #define MM_TO_PULSE_COUNT_SCALE (MAX_POS / MAX_MM)
 // 编码器位置到缸伸长量mm的转换系数
 #define PULSE_COUNT_TO_MM_SCALE (MAX_MM / MAX_POS)
-// 电机抱闸电平
-#define MOTION_LOCK_LEVEL   false
-// 接近开关接触电平
-#define SWITCH_BOTTOM_LEVEL true
-// 电机使能电平
-#define MOTION_ENABLE_LEVEL true
 // 是否采用PID控制平台下降，0为否，1为是，默认为否即可
 #define IS_PID_DOWN 0
 
@@ -123,14 +109,14 @@ public:
 	void InitData();
 	// 初始化所有硬件板卡
 	bool InitCard();
+	// 从配置文件中读取PID参数
+	void ReadParaFromFile();
 	// 关闭所有板卡，并保存平台状态
 	void Close(SixDofPlatformStatus laststatus);
 	// 设置单个电机的速度
 	void SetMotionVeloctySingle(int index, double velocity);
 	// 设置多个电机的速度
 	void SetMotionVelocty(double* velocity, int axexnum);
-	// 设置所有电机是否抱闸
-	bool ServoAllOnOff(bool isOn);
 	// 单缸向上运动
 	void SingleUp(int index);
 	// 单缸向下运动
@@ -141,18 +127,6 @@ public:
 	void AllTestDown();
 	// 编码器读数清零
 	bool ResetStatus();
-	// 所有电机打开抱闸
-	void EnableServo();
-	// 所有电机关闭抱闸并关闭使能
-	void LockServo();
-	// 所有电机打开抱闸并打开使能
-	void UnlockServo();
-	// 单个电机使能
-	void EnableServo(int index);
-	// 单个电机上锁
-	void LockServo(int index);
-	// 单个电机解锁
-	void UnlockServo(int index);
 	// 结束运动后回中
 	void MoveToZeroPulseNumber();
 	// PID控制器初始化
@@ -185,8 +159,6 @@ public:
 	void DDAControlThread();
 	// 所有缸是否位于底部
 	bool IsAllAtBottom();
-	// 读取所有接近开关状态
-	void ReadAllSwitchStatus();
 	// 检查六自由度平台状态
 	bool CheckStatus(SixDofPlatformStatus& status);
 	// 六自由度平台开机自检
@@ -209,7 +181,6 @@ public:
 	void SetEnable(bool bit);
 	// 系统卸荷
 	void SetDisable(bool bit);
-
 public:
 	// 电机编码器位置
 	double NowPluse[AXES_COUNT];
@@ -219,8 +190,6 @@ public:
 	double AvrPulse;
 	// 六自由度平台状态
 	SixDofPlatformStatus Status;
-	// 所有缸是否位于底部
-	bool IsAtBottoms[AXES_COUNT];
 private:
 	// 是否正在下降
 	bool isrising;

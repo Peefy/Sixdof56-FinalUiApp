@@ -56,18 +56,19 @@ static PID_Type MotionLocationPidControler[AXES_COUNT] =
 // 上升过程六个电机的PID控制器
 static PID_Type MotionRisePidControler[AXES_COUNT] = 
 {
-	{ RISE_MOTION_P * 0.9, RISE_MOTION_I * 0.9, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.88, RISE_MOTION_I * 0.88, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.75, RISE_MOTION_I * 0.50, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.82, RISE_MOTION_I * 0.86, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.70, RISE_MOTION_I * 0.62, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P * 0.74, RISE_MOTION_I * 0.74, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
 };
 
 // 构造函数
 DialogMotionControl::DialogMotionControl()
 {
 	InitData();
+	ReadParaFromFile();
 	InitCard();
 }
 
@@ -84,13 +85,17 @@ void DialogMotionControl::InitData()
 {
 	MIDDLE_POS = 2.4;
 	disposed = false; 
-	for (int i = 0; i < AXES_COUNT; ++i)
+	for (int ii = 0; ii < AXES_COUNT; ++ii)
 	{
-		NowPluse[i] = 0;
-		pos[i] = 0;
+		NowPluse[ii] = 0;
+		pos[ii] = 0;
 	}
 	AvrPulse = 0;
+}
 
+// 从配置文件中读取PID参数
+void DialogMotionControl::ReadParaFromFile()
+{
 	p = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_P_1_KEY);
 	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_I_1_KEY);
 	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_RISE_D_1_KEY);
@@ -150,7 +155,6 @@ void DialogMotionControl::InitData()
 	i = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_I_6_KEY);
 	d = config::ParseDoubleJsonFromFile(JSON_PARA_FILE_NAME, JSON_MOTION_D_6_KEY);
 	MyControllerSetPidPara(&MotionLocationPidControler[5], p, i, d);
-
 }
 
 // 初始化所有硬件板卡
@@ -185,12 +189,6 @@ void DialogMotionControl::SetMotionVelocty(double* velocity, int axexnum)
 	sixdofDioAndCount.SetMotionVel(velocity);
 }
  
-// 设置所有电机是否抱闸
-bool DialogMotionControl::ServoAllOnOff(bool isOn)
-{
-	return true;
-}
-
 // 单缸向上运动
 void DialogMotionControl::SingleUp(int index)
 {
@@ -225,62 +223,10 @@ bool DialogMotionControl::ResetStatus()
 	return true;
 }
 
-// 所有电机打开抱闸并使能
-void DialogMotionControl::EnableServo()
-{
-	bool bits[AXES_COUNT] = {MOTION_ENABLE_LEVEL};
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		bits[i] = MOTION_ENABLE_LEVEL;
-	}	
-}
-
-// 所有电机关闭抱闸并关闭使能
-void DialogMotionControl::LockServo()
-{
-	bool bits[AXES_COUNT] = {MOTION_LOCK_LEVEL};
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		bits[i] = MOTION_LOCK_LEVEL;
-	}
-	isrising = false;
-	isfalling = false;
-	enableMove = false;
-}
-
-// 所有电机打开抱闸并打开使能
-void DialogMotionControl::UnlockServo()
-{
-	bool bits[AXES_COUNT] = {!MOTION_LOCK_LEVEL};
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		bits[i] = !MOTION_LOCK_LEVEL;
-	}
-}
-
-// 单个电机使能
-void DialogMotionControl::EnableServo(int index)
-{
-	ASSERT_INDEX(index);
-}
-
-// 单个电机上锁
-void DialogMotionControl::LockServo(int index)
-{
-	ASSERT_INDEX(index);
-	enableMove = false;
-}
-
-// 单个电机解锁
-void DialogMotionControl::UnlockServo(int index)
-{
-	ASSERT_INDEX(index);
-}
-
 // 上升
 void DialogMotionControl::Rise()
 {
-	LockServo();
+	StopRiseDownMove();
 	for (int i = 0;i < AXES_COUNT;++i)
 	{
 		MyPidParaInit(MotionRisePidControler);
@@ -296,12 +242,10 @@ void DialogMotionControl::Rise()
 void DialogMotionControl::Down()
 {
 #if IS_PID_DOWN
-	LockServo();
 	Sleep(10);
 	isfalling = true;
 	isrising = false;
 	enableMove = false;
-	//UnlockServo();
 #else
 	AllTestDown();
 #endif	
@@ -528,41 +472,9 @@ void DialogMotionControl::StopRiseDownMove()
 // 所有缸是否位于底部
 bool DialogMotionControl::IsAllAtBottom()
 {
-	ReadAllSwitchStatus();
-	for (auto i = 0; i < AXES_COUNT; ++i)
-	{
-		auto isAtBottom = IsAtBottoms[i];
-		if (isAtBottom == false)
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-// 读取所有接近开关状态
-void DialogMotionControl::ReadAllSwitchStatus()
-{
-
-#if IS_BIG_MOTION
-	bool kbits[SXIDOF_MOTION_NUM] = { true,true,true,true,true,true };
-	sixdofDioAndCount.BigMotionReadKBit(kbits);
-#endif
-	for (int i = 0;i < AXES_COUNT;++i)
-	{
-		
-#if IS_BIG_MOTION
-		IsAtBottoms[i] = !kbits[i];
-#else
-		IsAtBottoms[i] = NowPluse[i] < 0.1;
-		//sixdofDioAndCount.ReadKBit(i, &IsAtBottoms[i]);
-#endif
-		if (IsAtBottoms[i] == true && isrising == false)
-		{
-			//ServoSingleStop(i);
-			//LockServo(i);
-		}
-	}
+	static double eps = 0.05;
+	auto avr = GetMotionAveragePulse();
+	return avr < eps;
 }
 
 // 检查六自由度平台状态
@@ -570,7 +482,6 @@ bool DialogMotionControl::CheckStatus(SixDofPlatformStatus& status)
 {
 	char* str = SixDofStatusText[status];
 	double pulse = 0;
-	ReadAllSwitchStatus();
 	switch (status)
 	{
 	case SIXDOF_STATUS_BOTTOM:
@@ -582,11 +493,7 @@ bool DialogMotionControl::CheckStatus(SixDofPlatformStatus& status)
 	case SIXDOF_STATUS_RUN:
 		break;
 	case SIXDOF_STATUS_ISRISING:
-		pulse = GetMotionAveragePulse();
-		if (pulse >= (RISE_R - 1) * PULSE_COUNT_RPM)
-		{
-			status = SIXDOF_STATUS_READY;
-		}			
+		status = SIXDOF_STATUS_READY;		
 		break;
 	case SIXDOF_STATUS_ISFALLING:			
 		status = SIXDOF_STATUS_BOTTOM;

@@ -217,12 +217,6 @@ void DialogMotionControl::AllTestDown()
 	SetMotionVelocty(vels, AXES_COUNT);
 }
 
-// 编码器读数清零
-bool DialogMotionControl::ResetStatus()
-{
-	return true;
-}
-
 // 上升
 void DialogMotionControl::Rise()
 {
@@ -554,18 +548,6 @@ void DialogMotionControl::TestHardware()
 #endif
 }
 
-// 硬件电源打开
-void DialogMotionControl::PowerStart(bool isStart)
-{
-
-}
-
-// 检修打开
-void DialogMotionControl::PowerCheckStart(bool isStart)
-{
-
-}
-
 // 油源启动
 void DialogMotionControl::SetOilStart(bool bit)
 {
@@ -604,4 +586,17 @@ void DialogMotionControl::SetDisable(bool bit)
 	sixdofDioAndCount.SetDisable(bit);
 }
 
+// 将所有输出IO置为低电平
+void DialogMotionControl::ResetAllIoPorts()
+{
+	SetOilStart(false);
+	SetOilStop(false);
+	SetEnable(false);
+	SetDisable(false);
+}
 
+// 设置中立位
+void DialogMotionControl::setMiddle(double zlw)
+{
+	MIDDLE_POS = RANGE(zlw, ZERO_POS, MAX_POS);
+}

@@ -125,8 +125,6 @@ public:
 	void AllTestUp();
 	// 所有缸向下测试运动
 	void AllTestDown();
-	// 编码器读数清零
-	bool ResetStatus();
 	// 结束运动后回中
 	void MoveToZeroPulseNumber();
 	// PID控制器初始化
@@ -165,22 +163,20 @@ public:
 	bool PowerOnSelfTest(SixDofPlatformStatus laststatus, double * lastpulse);
 	// 测试所有硬件
 	void TestHardware();
-	// 硬件电源打开
-	void PowerStart(bool isStart);
-	// 检修打开
-	void PowerCheckStart(bool isStart);
 	// 油源启动
 	void SetOilStart(bool bit);
 	// 油源停止
 	void SetOilStop(bool bit);
-	// 读取是否断电
-	bool IsNoPower();
-	// 读取是否低压保护
-	bool IsLowPower();
 	// 系统使能
 	void SetEnable(bool bit);
 	// 系统卸荷
 	void SetDisable(bool bit);
+	// 读取是否断电
+	bool IsNoPower();
+	// 读取是否低压保护
+	bool IsLowPower();
+	// 将所有输出IO置为低电平
+	void ResetAllIoPorts();
 public:
 	// 电机编码器位置
 	double NowPluse[AXES_COUNT];

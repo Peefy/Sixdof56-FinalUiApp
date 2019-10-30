@@ -329,6 +329,17 @@ void DialogMotionControl::RenewNowPulse()
 	}
 }
 
+// 获取所有电机编码器读数
+void DialogMotionControl::GetNowPulse(double* pulses)
+{
+	RenewNowPulse();
+	if(lockobj.try_lock())
+	{
+		memmove(pulses, NowPluse, sizeof(double) * AXES_COUNT);
+		lockobj.unlock();
+	}
+}
+
 // 获取中位缸伸长长度
 double* DialogMotionControl::GetNowPoleLength()
 {

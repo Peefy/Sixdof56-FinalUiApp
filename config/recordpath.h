@@ -8,6 +8,16 @@ namespace config {
 	// 记录平台参数到文件 const char * filename
 	void RecordData(const char * filename, double XAcc,double YAcc,double ZAcc,double RollSpeed,
 		double PitchSpeed,double YawSpeed, double Roll, double Pitch,double Yaw, int type);
+
+	class FileRecord
+	{
+	public:
+		FileRecord();
+		virtual ~FileRecord() {}
+		void Record(double x, double y, double z, double roll, double yaw, double pitch, 
+			double * poleLength, double * pulses);
+	};
+
 }
 
 #endif // !__RECORD_PATH_H_

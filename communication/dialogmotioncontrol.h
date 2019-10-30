@@ -149,6 +149,8 @@ public:
 	double GetMotionAveragePulse();
 	// 更新所有电机编码器读数
 	void RenewNowPulse();
+	// 获取所有电机编码器读数
+	void GetNowPulse(double* pulses);
 	// 获取中位缸伸长长度
 	double* GetNowPoleLength();
 	// 运动学正解获取姿态

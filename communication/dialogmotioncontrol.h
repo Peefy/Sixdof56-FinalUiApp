@@ -24,7 +24,7 @@ using namespace std;
 // 上平台上表面距离上平台铰链的垂直距离mm
 #define PlaneAboveHingeLength       590.0
 // 上平台上表面距离地面的垂直距离mm
-#define PlaneAboveBottomLength      3187.0
+#define PlaneAboveBottomLength      3695.0
 // 上平台圆圈半径mm
 #define CircleTopRadius             1700.0
 // 下平台圆圈半径mm

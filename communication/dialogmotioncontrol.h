@@ -24,15 +24,15 @@ using namespace std;
 // 上平台上表面距离上平台铰链的垂直距离mm
 #define PlaneAboveHingeLength       590.0
 // 上平台上表面距离地面的垂直距离mm
-#define PlaneAboveBottomLength      3695.0
+#define PlaneAboveBottomLength      3710.0
 // 上平台圆圈半径mm
 #define CircleTopRadius             1700.0
 // 下平台圆圈半径mm
-#define CircleBottomRadius          2400.025
+#define CircleBottomRadius          2400.0
 // 上平台同一组两个铰链的中心距离mm
-#define DistanceBetweenHingeTop     330.078
+#define DistanceBetweenHingeTop     330.0
 // 下平台同一组两个铰链的中心距离mm
-#define DistanceBetweenHingeBottom  330.181
+#define DistanceBetweenHingeBottom  330.0
 
 // 单位V
 #define RISE_VEL 0.5
@@ -131,6 +131,8 @@ public:
 	void PidControllerInit();
 	// 所有电机停转
 	bool ServoStop();
+	// 所有电机缓慢停止
+	void servoCurveStopThread();
 	// 单个电机停转
 	bool ServoSingleStop(int index);
 	// 停止上升或者下降的PID控制
@@ -205,6 +207,8 @@ private:
 	double polelenthmm[AXES_COUNT];
 	// 运动学正解缓冲变量
 	double posefromlength[AXES_COUNT];
+	// 当前电机速度
+	double vels[AXES_COUNT];
 	// 设置中立位
 	void setMiddle(double zlw);
 	// 板卡控制类

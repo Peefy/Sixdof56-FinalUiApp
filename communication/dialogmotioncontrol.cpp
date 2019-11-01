@@ -1,7 +1,9 @@
 
 #include "stdafx.h"
 
+#include <stdlib.h>
 #include <math.h>
+#include <thread>
 
 #include "dialogmotioncontrol.h"
 #include "../Sixdofdll2010.h"
@@ -19,7 +21,7 @@
 // 平台运行过程PID控制参数-D
 #define MOTION_D 0.0
 // 平台运行过程当中最大速度
-#define MAX_VEL  6.0
+#define MAX_VEL  5.0
 // 平台上升过程PID控制参数-P
 #define RISE_MOTION_P 0.06
 // 平台上升过程PID控制参数-I
@@ -89,6 +91,7 @@ void DialogMotionControl::InitData()
 	{
 		NowPluse[ii] = 0;
 		pos[ii] = 0;
+		vels[ii] = 0;
 	}
 	AvrPulse = 0;
 }
@@ -180,12 +183,14 @@ void DialogMotionControl::SetMotionVeloctySingle(int index, double velocity)
 {
 	//ASSERT_INDEX(index);
 	velocity = RANGE_V(velocity, -MAX_VEL, MAX_VEL);
+	vels[index] = velocity;
 	sixdofDioAndCount.SetMotionVel(index, velocity);
 }
 
 // 设置多个电机的速度
 void DialogMotionControl::SetMotionVelocty(double* velocity, int axexnum)
 {
+	memmove(vels, velocity, sizeof(double) * AXES_COUNT);
 	sixdofDioAndCount.SetMotionVel(velocity);
 }
  
@@ -472,6 +477,28 @@ void DialogMotionControl::StopRiseDownMove()
 	double vel[AXES_COUNT];
 	memset(vel, 0, sizeof(double) * AXES_COUNT);
 	SetMotionVelocty(vel, AXES_COUNT);
+}
+
+void DialogMotionControl::servoCurveStopThread()
+{
+	enableMove = false;
+	isrising = false;
+	isfalling = false;
+	double stopvel[AXES_COUNT] = {0};
+	double setvel[AXES_COUNT] = {0};
+	int totalcount = 100;
+	int delay = 5;
+	memmove(stopvel, vels, sizeof(double) * AXES_COUNT);
+	memmove(setvel, vels, sizeof(double) * AXES_COUNT);
+	for (int i = 0;i < totalcount;++i)
+	{
+		for (int j = 0;j < AXES_COUNT;++j)
+		{
+			setvel[j] -= stopvel[j] / ((double)totalcount);
+		}
+		SetMotionVelocty(setvel, AXES_COUNT);
+		Sleep(delay);
+	}
 }
 
 // 所有缸是否位于底部

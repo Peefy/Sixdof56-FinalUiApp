@@ -35,9 +35,9 @@ using namespace std;
 #define DistanceBetweenHingeBottom  330.0
 
 // 单位V
-#define RISE_VEL 0.5
+#define RISE_VEL 0.15
 // 单位V
-#define DOWN_VEL 0.5
+#define DOWN_VEL 0.25
 
 // 平台运动最大角度deg
 #define MAX_DEG 30

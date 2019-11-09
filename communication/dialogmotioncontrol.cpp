@@ -30,7 +30,7 @@
 #define RISE_MOTION_D 0.0
 // 平台上升过程当中最大速度
 #define RISE_MIN_VEL  0.1
-#define RISE_MAX_VEL  1.2
+#define RISE_MAX_VEL  0.5
 
 // PID临时变量
 static double p = 0.0001;

@@ -30,7 +30,7 @@
 #define RISE_MOTION_D 0.0
 // 平台上升过程当中最大速度
 #define RISE_MIN_VEL  0.1
-#define RISE_MAX_VEL  2.0
+#define RISE_MAX_VEL  1.2
 
 // PID临时变量
 static double p = 0.0001;
@@ -486,7 +486,7 @@ void DialogMotionControl::servoCurveStopThread()
 	isfalling = false;
 	double stopvel[AXES_COUNT] = {0};
 	double setvel[AXES_COUNT] = {0};
-	int totalcount = 100;
+	int totalcount = 200;
 	int delay = 5;
 	memmove(stopvel, vels, sizeof(double) * AXES_COUNT);
 	memmove(setvel, vels, sizeof(double) * AXES_COUNT);

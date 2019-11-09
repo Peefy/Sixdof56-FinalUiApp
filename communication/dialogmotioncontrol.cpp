@@ -638,3 +638,5 @@ void DialogMotionControl::setMiddle(double zlw)
 {
 	MIDDLE_POS = RANGE(zlw, ZERO_POS, MAX_POS);
 }
+
+

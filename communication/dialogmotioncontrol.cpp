@@ -449,7 +449,7 @@ void DialogMotionControl::MoveToZeroPulseNumber()
 		MyPidParaInit(&MotionRisePidControler[i]);
 	}
 	Sleep(10);
-	isrising = true;
+	isfalling = true;
 }
 
 // PID¿ØÖÆÆ÷³õÊ¼»¯

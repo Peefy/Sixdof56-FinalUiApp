@@ -276,11 +276,19 @@ void DialogMotionControl::PidCsp(double * pulse)
 			pulse[i] = RANGE_V(pulse[i], HALF_RPM_POS, MAX_POS - HALF_RPM_POS);
 			now_vel[i] = MyDeltaPID_Real(&MotionLocationPidControler[i], \
 				NowPluse[i], pulse[i]);
+			if (now_vel[i] - last_str_vel[i] >= 0.1){
+				now_vel[i] = last_str_vel[i] + 0.1;
+			}
+			if (now_vel[i] - last_str_vel[i] <= 0.1){
+				now_vel[i] = last_str_vel[i] - 0.1;
+			}
+			last_str_vel[i] = now_vel[i];
 		}
 		lockobj.unlock();
 	}
 	SetMotionVelocty(now_vel, AXES_COUNT);
 }
+
 
 // 缓慢的连续位置控制(PID控制)
 void DialogMotionControl::SlowPidCsp(double * pulse)

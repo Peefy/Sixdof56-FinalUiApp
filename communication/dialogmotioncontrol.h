@@ -94,7 +94,7 @@ using namespace std;
 // 编码器位置到缸伸长量mm的转换系数
 #define PULSE_COUNT_TO_MM_SCALE (MAX_MM / MAX_POS)
 // 是否采用PID控制平台下降，0为否，1为是，默认为否即可
-#define IS_PID_DOWN 0
+#define IS_PID_DOWN 1
 
 using namespace std;
 

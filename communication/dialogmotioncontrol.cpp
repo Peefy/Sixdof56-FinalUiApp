@@ -268,6 +268,7 @@ void DialogMotionControl::Csp(double * pulse)
 // 连续位置控制(PID控制)
 void DialogMotionControl::PidCsp(double * pulse)
 {
+	auto vel_delta = 0.03;
 	if (lockobj.try_lock())
 	{	
 		for (auto i = 0; i < AXES_COUNT; ++i)
@@ -279,7 +280,7 @@ void DialogMotionControl::PidCsp(double * pulse)
 			if (now_vel[i] - last_str_vel[i] >= 0.1){
 				now_vel[i] = last_str_vel[i] + 0.1;
 			}
-			if (now_vel[i] - last_str_vel[i] <= 0.1){
+			else if (now_vel[i] - last_str_vel[i] <= 0.1){
 				now_vel[i] = last_str_vel[i] - 0.1;
 			}
 			last_str_vel[i] = now_vel[i];

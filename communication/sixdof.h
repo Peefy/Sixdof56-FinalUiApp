@@ -151,7 +151,8 @@ typedef enum
 	SIXDOF_STATUS_MIDDLE,	  //六自由度平台状态_正在回中
 	SIXDOF_STATUS_RUN,	      //六自由度平台状态_正在运行
 	SIXDOF_STATUS_ISRISING,	  //六自由度平台状态_正在上升
-	SIXDOF_STATUS_ISFALLING   //六自由度平台状态_正在下降
+	SIXDOF_STATUS_ISFALLING,  //六自由度平台状态_正在下降
+	SIXDOF_STATUS_PAUSING	  //六自由度平台状态_正在暂停
 }SixDofPlatformStatus;
 
 //六自由度平台状态字符串数组

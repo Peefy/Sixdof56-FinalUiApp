@@ -12,6 +12,8 @@
 #define IDC_BTN_CONNECT_SHOW_TEXT      "所有缸上"
 #define IDC_BTN_DISCONNECT_SHOW_TEXT   "所有缸下"
 
+#define IDC_BTN_Pause_SHOW_TEXT        "暂停"
+#define IDC_BTN_Recover_SHOW_TEXT      "恢复"
 #define IDC_STATIC_POSE_SHOW_TEXT      "姿态"
 #define IDC_STATIC_LENGTH_SHOW_TEXT    "缸长"
 #define IDC_STATIC_SENSOR_SHOW_TEXT    "采集"

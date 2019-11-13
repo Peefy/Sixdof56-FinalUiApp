@@ -185,7 +185,6 @@ BEGIN
     LTEXT           "Static",IDC_STATIC,0,0,25,8
     LTEXT           "¤¤¥ß¦ì¡]mm¡^",IDC_STATIC,34,260,49,8
     PUSHBUTTON      "??ªo·½",IDC_BUTTON_OIL_START,190,257,56,14
-    PUSHBUTTON      "Run",IDC_BTN_Start2,122,63,22,16,WS_DISABLED
     PUSHBUTTON      "«ìÎ`",IDC_BTN_Recover,167,79,71,16,WS_DISABLED
 END
 

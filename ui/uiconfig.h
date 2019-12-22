@@ -4,7 +4,7 @@
 
 #define WINDOW_TITLE "星光凯明六自由度平台"
 
-#define IDC_BTN_START_SHOW_TEXT "运行"
+#define IDC_BTN_START_SHOW_TEXT "数据运行"
 
 #define IDC_BTN_SINGLE_UP_SHOW_TEXT    "单缸上"
 #define IDC_BTN_SINGLE_DOWN_SHOW_TEXT  "单缸下"
@@ -47,13 +47,13 @@
 #define IDC_STATIC_YAW_ZERO_POS_SHOW_TEXT    "航向零位"
 
 #define IDC_STATIC_TEST_SHOW_TEXT      "测试(位移单位:1mm, 角度单位:1°, 频率单位:1Hz, 相位单位:1°)"
-#define IDC_BUTTON_TEST_SHOW_TEXT      "运行测试"
+#define IDC_BUTTON_TEST_SHOW_TEXT      "运行"
 
 #define CORPORATION_NAME "北京市星光凯明动感仿真模拟器中心"
 
 //#define APP_TITLE "大型特种车驾驶模拟训练系统"
-#define APP_TITLE ""
-#define APP_TITLE_FONT_SIZE 240
+#define APP_TITLE "六  自  由  度  液  压  摇  摆  台"
+#define APP_TITLE_FONT_SIZE 230
 
 #define CHART_TITLE "位姿信息"
 #define CHART_LEFT_AXIS_TITLE "数值单位(mm, °)"

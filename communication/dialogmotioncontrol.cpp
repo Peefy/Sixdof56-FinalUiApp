@@ -15,22 +15,25 @@
 #define ASSERT_INDEX(index) 	if (index < 0 && index >= AXES_COUNT) return;
 
 // 平台运行过程PID控制参数-P
-#define MOTION_P 0.44
+#define MOTION_P 1.0
 // 平台运行过程PID控制参数-I
-#define MOTION_I 0.0002
+#define MOTION_I 0.001
 // 平台运行过程PID控制参数-D
-#define MOTION_D 0.0
+#define MOTION_D 0.0013
 // 平台运行过程当中最大速度
 #define MAX_VEL  5.0
 // 平台上升过程PID控制参数-P
-#define RISE_MOTION_P 0.06
+#define RISE_MOTION_P 0.3
 // 平台上升过程PID控制参数-I
-#define RISE_MOTION_I 0.00002
+#define RISE_MOTION_I 0.00026
 // 平台上升过程PID控制参数-D
-#define RISE_MOTION_D 0.0
+#define RISE_MOTION_D 0.0015
 // 平台上升过程当中最大速度
 #define RISE_MIN_VEL  0.1
-#define RISE_MAX_VEL  0.5
+#define RISE_MAX_VEL  0.6
+
+// 六自由度平台逻辑控制
+DialogMotionControl wjp;
 
 // PID临时变量
 static double p = 0.0001;
@@ -47,30 +50,30 @@ static ULONG last_pulses[AXES_COUNT] = {0};
 // 运行过程六个电机的PID控制器
 static PID_Type MotionLocationPidControler[AXES_COUNT] = 
 {
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
-	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL }
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },			//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },			//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },			//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },			//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },			//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL },
+	{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL }				//{ MOTION_P, MOTION_I, MOTION_D, -MAX_VEL, MAX_VEL }
 };
 
 // 上升过程六个电机的PID控制器
 static PID_Type MotionRisePidControler[AXES_COUNT] = 
 {
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
-	{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL }
+	{ 0.27,   0.000305,  0.00036,  -RISE_MAX_VEL, RISE_MAX_VEL },			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ 0.27,   0.000270,  0.0016,  -RISE_MAX_VEL, RISE_MAX_VEL },			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ 0.265,  0.000256,  0.0035,  -RISE_MAX_VEL, RISE_MAX_VEL },			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ 0.265,  0.000100,  0.0030,  -RISE_MAX_VEL, RISE_MAX_VEL },			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ 0.300,  0.000290,  0.0041,  -RISE_MAX_VEL, RISE_MAX_VEL },			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL },
+	{ 0.32,   0.000530,  0.0005,  -RISE_MAX_VEL, RISE_MAX_VEL }			//{ RISE_MOTION_P, RISE_MOTION_I, RISE_MOTION_D, -RISE_MAX_VEL, RISE_MAX_VEL }
 };
 
 // 构造函数
 DialogMotionControl::DialogMotionControl()
 {
 	InitData();
-	ReadParaFromFile();
+	//ReadParaFromFile();				//从配置文件读取数据1112改
 	InitCard();
 }
 
@@ -268,7 +271,7 @@ void DialogMotionControl::Csp(double * pulse)
 // 连续位置控制(PID控制)
 void DialogMotionControl::PidCsp(double * pulse)
 {
-	auto vel_delta = 0.01;
+	/*auto vel_delta = 0.01;*/
 	if (lockobj.try_lock())
 	{	
 		for (auto i = 0; i < AXES_COUNT; ++i)
@@ -277,13 +280,13 @@ void DialogMotionControl::PidCsp(double * pulse)
 			pulse[i] = RANGE_V(pulse[i], HALF_RPM_POS, MAX_POS - HALF_RPM_POS);
 			now_vel[i] = MyDeltaPID_Real(&MotionLocationPidControler[i], \
 				NowPluse[i], pulse[i]);
-			if (now_vel[i] - last_str_vel[i] >= vel_delta){
+			/*if (now_vel[i] - last_str_vel[i] >= vel_delta){
 				now_vel[i] = last_str_vel[i] + vel_delta;
 			}
 			else if (now_vel[i] - last_str_vel[i] <= vel_delta){
 				now_vel[i] = last_str_vel[i] - vel_delta;
 			}
-			last_str_vel[i] = now_vel[i];
+			last_str_vel[i] = now_vel[i];*/
 		}
 		lockobj.unlock();
 	}
@@ -294,6 +297,7 @@ void DialogMotionControl::PidCsp(double * pulse)
 // 缓慢的连续位置控制(PID控制)
 void DialogMotionControl::SlowPidCsp(double * pulse)
 {
+	auto vel_delta = 0.01;
 	if (lockobj.try_lock())
 	{	
 		for (auto i = 0; i < AXES_COUNT; ++i)
@@ -302,6 +306,15 @@ void DialogMotionControl::SlowPidCsp(double * pulse)
 			pulse[i] = RANGE_V(pulse[i], 0, MAX_POS);
 			now_vel[i] = MyDeltaPID_Real(&MotionRisePidControler[i], \
 				NowPluse[i], pulse[i]);
+			if (now_vel[i] - last_str_vel[i] >= vel_delta)
+			{
+				now_vel[i] = last_str_vel[i] + vel_delta;
+			}
+			else if (now_vel[i] - last_str_vel[i] <= vel_delta)
+			{
+				now_vel[i] = last_str_vel[i] - vel_delta;
+			}
+			last_str_vel[i] = now_vel[i];
 		}
 		lockobj.unlock();
 	}
@@ -413,8 +426,9 @@ void DialogMotionControl::DDAControlThread()
 			SlowPidCsp(pulses);
 			for (int i = 0; i < AXES_COUNT; ++i)
 			{
-				if (abs(NowPluse[i] - 0) <= 1)
+				if (abs(NowPluse[i] - 0) <= 0.3)
 				{
+					wjp.AllTestDown();
 					//ServoSingleStop(i);
 					//LockServo(i);
 				}
@@ -448,8 +462,13 @@ void DialogMotionControl::MoveToZeroPulseNumber()
 	{
 		MyPidParaInit(&MotionRisePidControler[i]);
 	}
-	Sleep(10);
+	Sleep(5);
+	isrising = true;
+	Sleep(2000);
 	isfalling = true;
+	isrising = false;
+	//Sleep(10);
+	
 }
 
 // PID控制器初始化
